@@ -1,4 +1,6 @@
 import { Record } from './Record';
+import { WorkoutItem } from './WorkoutItem';
+
 @Entry
 @Component
 export struct Workout {
@@ -6,8 +8,8 @@ export struct Workout {
   private tabController: TabsController = new TabsController()
   @Builder
   PagesMap(name: string) {
-    if (name == 'Record') {
-      Record()
+    if (name == "Workout List") {
+      WorkoutItem()
     }
   }
 
@@ -20,7 +22,7 @@ export struct Workout {
       Stack() {
         Button('+')
           .onClick(() => {
-            this.pathStack.pushPathByName('Record', '');
+            this.pathStack.pushPathByName("Workout List", '');
           })
       }
     }

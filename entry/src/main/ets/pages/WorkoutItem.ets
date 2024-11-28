@@ -68,10 +68,6 @@ export const exerciseList: Exercise[] = [
     target_muscle: ["Triceps"]
   },
   {
-    name: 'Triceps Pushdown',
-    target_muscle: ["Triceps"]
-  },
-  {
     name: 'Seated Triceps Press',
     target_muscle: ["Triceps"]
   },
@@ -149,37 +145,40 @@ export struct WorkoutItem {
   }
 
   build() {
-    Navigation(this.pathStack) {
-      Grid() {
-        ForEach(this.workoutList, (item: string, index: number) => {
-          if (item == 'Cardio') {
-            GridItem() {
-              Text(item)
+    NavDestination() {
+      Navigation(this.pathStack) {
+        Grid() {
+          ForEach(this.workoutList, (item: string, index: number) => {
+            if (item == 'Cardio') {
+              GridItem() {
+                Text(item)
+              }
+              .borderWidth(1)
+              .columnStart(1)
+              .columnEnd(4)
             }
-            .borderWidth(1)
-            .columnStart(1)
-            .columnEnd(4)
-          }
-          else {
-            GridItem() {
-              Text(item)
+            else {
+              GridItem() {
+                Text(item)
+              }
+              .borderWidth(1)
+              .onClick(() => {
+                let tmp: string = item
+                this.pathStack.pushPathByName('ItemDetail', tmp)
+              })
             }
-            .borderWidth(1)
-            .onClick(() => {
-              let tmp: string = item
-              this.pathStack.pushPathByName('ItemDetail', tmp)
-            })
-          }
-        })
+          })
+        }
+        .rowsTemplate('1fr 1fr 1fr 1fr 1fr')
+        .columnsTemplate('1fr 1fr 1fr 1fr')
       }
-      .rowsTemplate('1fr 1fr 1fr 1fr 1fr')
-      .columnsTemplate('1fr 1fr 1fr 1fr')
+      .mode(NavigationMode.Stack)
+      .titleMode(NavigationTitleMode.Mini)
+      .title('Types')
+      .navDestination(this.PagesMap)
+      .hideBackButton(true)
     }
-    .mode(NavigationMode.Stack)
-    .titleMode(NavigationTitleMode.Mini)
     .title('Workout List')
-    .navDestination(this.PagesMap)
-    .hideBackButton(true)
   }
 }
 

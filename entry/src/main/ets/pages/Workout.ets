@@ -1,13 +1,23 @@
 import DateUtil from '../Utils/DateUtils';
-import { Record } from './Record';
 import { WorkoutItem } from './WorkoutItem';
+import DateDialog from '../Component/dateSelectionDialog'
+import systemDateTime from '@ohos.systemDateTime';
+import { BusinessError } from '@ohos.base';
 
 @Entry
 @Component
 export struct Workout {
   pathStack: NavPathStack = new NavPathStack()
   private tabController: TabsController = new TabsController()
-  @State date: number = DateUtil.beginTime(new Date())
+  @State convertedDate: string = ''
+  @StorageProp('date') date: number = DateUtil.beginTimeOfDay(new Date())
+  @StorageLink('current_date') currentDate: string = ''
+
+  dateSelectionController: CustomDialogController = new CustomDialogController({
+    builder: DateDialog({
+      date: new Date(this.date)
+    })
+  })
 
   @Builder
   PagesMap(name: string) {
@@ -18,6 +28,9 @@ export struct Workout {
 
   aboutToAppear(): void {
     AppStorage.setOrCreate("PathStack", this.pathStack)
+    systemDateTime.getCurrentTime((error: BusinessError, time: number) => {
+      this.convertedDate = DateUtil.timestampToDate(time);
+    });
   }
 
   build() {
@@ -25,8 +38,9 @@ export struct Workout {
       Stack() {
         Column() {
           Column() {
+            Text(`${this.currentDate}`)
             Row() {
-              Text(DateUtil.formatDate(this.date))
+              Text(`${this.currentDate == '' ? this.convertedDate : this.currentDate}`)
                 .fontSize(15)
                 .fontWeight(500)
               Image($r('app.media.drop_icon'))
@@ -42,6 +56,9 @@ export struct Workout {
             .borderRadius(20)
             .borderWidth(1)
             .justifyContent(FlexAlign.Center)
+            .onClick(()=>{
+              this.dateSelectionController.open()
+            })
           }
           .justifyContent(FlexAlign.End)
           .backgroundColor(Color.Pink)

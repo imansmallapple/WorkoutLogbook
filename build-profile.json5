@@ -1,6 +1,19 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "material": {
+          "certpath": "C:/Users/c84381641/.ohos/config/openharmony/default_WorkoutLogbook_jmiTTIeF-_R8s2beNVyQGVdMKM51i8x0iDwh7vCmw14=.cer",
+          "storePassword": "0000001BFBF671A50BC0AD59005BDD840F90A3BDCD5875236669F533D479BA8539754FD217D7B8A687A665",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BB1235718E12076DCBD5DDF98ADD27AB488AFD574F32D5A180B75130ABFBC008A594CAAE3E40387",
+          "profile": "C:/Users/c84381641/.ohos/config/openharmony/default_WorkoutLogbook_jmiTTIeF-_R8s2beNVyQGVdMKM51i8x0iDwh7vCmw14=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:/Users/c84381641/.ohos/config/openharmony/default_WorkoutLogbook_jmiTTIeF-_R8s2beNVyQGVdMKM51i8x0iDwh7vCmw14=.p12"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",

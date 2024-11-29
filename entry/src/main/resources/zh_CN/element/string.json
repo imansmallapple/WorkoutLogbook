@@ -19,6 +19,10 @@
     {
       "name": "record",
       "value": "记录"
+    },
+    {
+      "name": "app_name",
+      "value": "健身日志"
     }
   ]
 }

@@ -10,7 +10,6 @@ export struct ItemDetail {
 
   build() {
     NavDestination() {
-      Text(`${this.workoutType}`)
       Grid() {
         ForEach(this.exerciseList, (item: Exercise, index: number) => {
           if (item.target_muscle.includes(this.workoutType)) {

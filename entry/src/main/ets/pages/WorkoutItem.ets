@@ -176,9 +176,9 @@ export struct WorkoutItem {
       .titleMode(NavigationTitleMode.Mini)
       .title('Types')
       .navDestination(this.PagesMap)
-      .hideBackButton(true)
     }
     .title('Workout List')
+    .hideTitleBar(true)
   }
 }
 

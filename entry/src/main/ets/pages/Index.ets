@@ -1,10 +1,14 @@
 import { Record } from '../pages/Record'
 import { Workout } from './Workout'
+import { Exercise } from './WorkoutItem';
+
+PersistentStorage.persistProp<Exercise[]>('exerciseList', [])
 
 @Entry
 @Component
 struct Index {
   @State currentTabIndex: number = 0;
+  @StorageLink('exerciseList') exerciseList: Exercise[] = []
 
   build() {
     Tabs() {

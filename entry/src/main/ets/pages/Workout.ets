@@ -1,9 +1,10 @@
 import DateUtil from '../Utils/DateUtils';
-import { WorkoutItem } from './WorkoutItem';
+import { Exercise, WorkoutItem } from './WorkoutItem';
 import systemDateTime from '@ohos.systemDateTime';
 import { BusinessError } from '@ohos.base';
 import { CalenderDialog } from '../Component/calender'
 import { OptionDialog } from '../Component/exerciseOptionComponent'
+import { Sport } from '../model/dailyExercise'
 
 @Entry
 @Component
@@ -18,6 +19,24 @@ export struct Workout {
     alignment: DialogAlignment.Center
   })
   @State selectedDate: string = DateUtil.timestampToDate(new Date().getTime());
+  @State arr: Sport[] = [
+  // {
+  //   name: 'dancing',
+  //   icon: $r('app.media.app_icon'),
+  //   consume: 400,
+  //   target: 2,
+  //   num: 1,
+  //   unit: "times"
+  // },
+  // {
+  //   name: 'Jumping',
+  //   icon: $r('app.media.app_icon'),
+  //   consume: 400,
+  //   target: 2,
+  //   num: 2,
+  //   unit: "hours"
+  // },
+  ]
 
   @Builder
   PagesMap(name: string) {
@@ -34,7 +53,7 @@ export struct Workout {
   }
 
   build() {
-    Stack() {
+    Column() {
       Column() {
         Column() {
           Row() {
@@ -76,6 +95,7 @@ export struct Workout {
             offsetY: 10,
             color: '#8044a04f'
           })
+          .margin({ top: 30 })
 
           Row() {
             Text('Have you worked out today?')
@@ -85,16 +105,14 @@ export struct Workout {
           .width('80%')
           .height('20%')
           .margin({
-            bottom: ('80%')
+            bottom: ('10%')
           })
           .justifyContent(FlexAlign.Center)
         }
-        .justifyContent(FlexAlign.Center)
+        .justifyContent(FlexAlign.Start)
         .backgroundColor(Color.White)
-        .height('100%')
         .width('100%')
       }
-      .height('100%')
 
       Button() {
         Column() {
@@ -124,25 +142,62 @@ export struct Workout {
       })
 
       Column() {
-        Column() {
-          Image($r('app.media.calendar_icon'))
-            .width(30)
-            .onClick(() => {
-
-            })
-
-          Text('Choose another day if you want')
-            .fontColor('#9f777676')
+        Text("Task List")
+          .fontSize(13)
+          .fontWeight(700)
+          .margin({ left: 20, top: 20, bottom: 10 })
+        if (this.arr.length !== 0) {
+          Column() {
+            List() {
+              ForEach(this.arr, (item: Sport) => {
+                ListItem() {
+                  Row({ space: 10 }) {
+                    Image($r('app.media.app_icon'))
+                      .width(50)
+                      .height(50)
+                    Text(item.name)
+                      .fontSize(13)
+                      .fontWeight(600)
+                      .opacity(0.8)
+                    Blank()
+                    if (item.num == item.target) {
+                      Text('Consume ' + item.consume * (item.num as number) + ' Calories')
+                        .fontSize(13)
+                        .fontWeight(600)
+                        .margin({ right: 10 })
+                        .fontColor('#e90e5e85')
+                    }
+                  }
+                  .width('100%')
+                  .backgroundColor(Color.White)
+                  .borderRadius(15)
+                  .margin({ bottom: 10 })
+                }
+                .width('90%')
+              })
+            }
+            .width('100%')
+            .alignListItem(ListItemAlign.Center)
+          }
+          .width('100%')
         }
-        .alignItems(HorizontalAlign.End)
+        else {
+          Column({ space: 8 }) {
+            Image($r('app.media.startIcon'))
+              .width(100)
+              .height(100)
+            Text('No task, please add')
+              .fontSize(20)
+              .opacity(0.4)
+          }
+          .width('100%')
+          .margin({top: 20})
+        }
       }
-      .alignItems(HorizontalAlign.End)
-      .justifyContent(FlexAlign.End)
-      .width('80%')
-      .height('30%')
-      .zIndex(0)
+      .width('100%')
+      .height('100%')
+      .alignItems(HorizontalAlign.Start)
     }
-    .alignContent(Alignment.Center)
     .width('100%')
     .height('100%')
   }

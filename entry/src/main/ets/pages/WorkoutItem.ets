@@ -4,7 +4,7 @@ import router from '@ohos.router';
 
 export interface Exercise {
   name: string;
-  target_muscle: string[];
+  target_muscle?: string[];
 }
 
 const typeList: string[] = [

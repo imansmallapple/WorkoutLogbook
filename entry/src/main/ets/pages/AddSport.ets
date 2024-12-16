@@ -4,6 +4,9 @@ import router from '@ohos.router'
 @Entry
 @Component
 struct AddSport {
+
+  controller: CustomDialogController
+
   arr: Sport[] = [
     {
       name: 'Dancing',
@@ -56,6 +59,7 @@ struct AddSport {
               .backgroundColor(Color.Transparent)
               .onClick(()=>{
                 // todo: Trigger select sport action
+
               })
             }
             .width('100%')

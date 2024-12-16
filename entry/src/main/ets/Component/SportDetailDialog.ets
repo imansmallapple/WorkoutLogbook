@@ -47,6 +47,7 @@ export struct SportDetailDialog {
     } else {
       this.num = amount
       this.val = val
+      console.info(`num:${this.num}, val:${this.val}`)
     }
   }
 

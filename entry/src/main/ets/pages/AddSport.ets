@@ -26,14 +26,37 @@ struct AddSport {
           .width(25)
       }
       .margin({ top: 10, left: 10, bottom: 10 })
-      .onClick(()=>{
+      .onClick(() => {
         router.back()
       })
-      List({space: 10}){
-        ForEach(this.arr, (item:Sport)=>{
-          ListItem(){
-            Row(){
-                // todo: Content to be added
+
+      List({ space: 10 }) {
+        ForEach(this.arr, (item: Sport) => {
+          ListItem() {
+            Row() {
+              Image(item.icon)
+                .width(60)
+                .height(60)
+                .margin({ right: 15 })
+              Column() {
+                Text(item.name)
+                  .fontSize(15)
+                  .fontWeight(500)
+                Text(item.consume + ' calories ' + item.unit)
+                  .fontSize(10)
+                  .fontWeight(600)
+                  .opacity(0.7)
+              }
+              .alignItems(HorizontalAlign.Start)
+              Blank()
+              Button(){
+                Image($r('app.media.icon'))
+                  .width(20)
+              }
+              .backgroundColor(Color.Transparent)
+              .onClick(()=>{
+                // todo: Trigger select sport action
+              })
             }
             .width('100%')
             .justifyContent(FlexAlign.SpaceBetween)

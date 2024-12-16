@@ -13,13 +13,13 @@ struct AddSport {
       name: 'Dancing',
       icon: $r('app.media.icon'),
       consume: 600,
-      unit: 'hours'
+      unit: 'hour'
     },
     {
       name: 'Bicycle',
       icon: $r('app.media.icon'),
       consume: 600,
-      unit: 'hours'
+      unit: 'hour'
     }
   ]
 
@@ -46,7 +46,7 @@ struct AddSport {
                 Text(item.name)
                   .fontSize(15)
                   .fontWeight(500)
-                Text(item.consume + ' calories ' + item.unit)
+                Text(item.consume + ' calories/' + item.unit)
                   .fontSize(10)
                   .fontWeight(600)
                   .opacity(0.7)

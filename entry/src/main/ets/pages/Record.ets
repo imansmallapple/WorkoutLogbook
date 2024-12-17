@@ -1,10 +1,22 @@
 import { Exercise } from './WorkoutItem'
+import { Record } from '../model/record'
 
 @Entry
 @Component
-export struct Record {
-  pathStack: NavPathStack = new NavPathStack()
+export struct RecordPage {
   @StorageLink('selectedExerciseList') selectedExercise: Exercise[] = []
+  // @State records: Record[] = AppStorage.get<Record[]>("recordList") ?? []
+  // @StorageLink('recordList') records: Record[] = []
+  // @StorageProp('recordList') records: Record[] = [];
+  @State records: Record[] = AppStorage.get("recordList") ?? []
+  aboutToAppear(): void {
+    console.info('RecordPage aboutToAppear triggered');
+    console.info(`Number of records: ${this.records.length}`);
+
+    this.records.forEach((item: Record, index: number) => {
+      console.info(`Record ${index}: Date = ${item.date}`);
+    });
+  }
 
   @Builder
   NavigationComponent() {
@@ -53,14 +65,24 @@ export struct Record {
 
         Row() {
           Column() {
+              Text(`total record time in record page:${this.records}`)
+              List(){
+                ForEach(this.records,(item: Record, index: number)=>{
+                  ListItem(){
+                    Row(){
+                      Text(`record date: ${item.date}`)
+                    }
+                  }
+                })
+              }
 
-            Row() {
-              Text('24th November 2024')
-                .fontSize(18)
-                .fontColor('#f735028a')
-                .fontWeight(500)
-            }
-            .width('100%')
+              Row() {
+                Text(`24th November 2024`)
+                  .fontSize(18)
+                  .fontColor('#f735028a')
+                  .fontWeight(500)
+              }
+              .width('100%')
 
             Row() {
               Divider()
@@ -142,13 +164,14 @@ export struct Record {
                 color: '#5b5ea237'
               })
             }
-            Row(){
+
+            Row() {
               Text('Total: 48m49s')
                 .fontColor('#f735028a')
                 .fontSize(15)
             }
             .width('100%')
-            .margin({top: 5})
+            .margin({ top: 5 })
             .justifyContent(FlexAlign.End)
           }
         }

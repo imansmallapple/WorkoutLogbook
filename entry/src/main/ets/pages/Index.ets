@@ -1,4 +1,4 @@
-import { Record } from '../pages/Record'
+import { RecordPage } from '../pages/Record'
 import { Workout } from './Workout'
 import { Exercise } from './WorkoutItem';
 
@@ -18,7 +18,7 @@ struct Index {
       .tabBar(this.barBuilder(0, $r('app.string.workout'), $r('app.media.workout_not_selected_icon'), $r('app.media.workout_selected_icon')))
 
       TabContent() {
-        Record()
+        RecordPage()
       }
       .tabBar(this.barBuilder(1, $r('app.string.record'), $r('app.media.record_not_selected_icon'), $r('app.media.record_selected_icon')))
     }

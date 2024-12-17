@@ -2,11 +2,17 @@ import { Sport } from '../model/dailyExercise'
 import router from '@ohos.router'
 import { SportDetailDialog } from '../Component/SportDetailDialog'
 
+AppStorage.setOrCreate<Sport>("current_sport", new Sport());
+
 @Entry
 @Component
 struct AddSport {
+  @StorageLink("current_sport") current_sport: Sport = new Sport();
+  @State num: number = 0
   controller: CustomDialogController = new CustomDialogController({
-    builder: SportDetailDialog()
+    builder: SportDetailDialog({
+      num:$num
+    })
   })
   arr: Sport[] = [
     {
@@ -45,6 +51,7 @@ struct AddSport {
       .onClick(() => {
         router.back()
       })
+      Text(`num:${this.num}`)
 
       List({ space: 10 }) {
         ForEach(this.arr, (item: Sport) => {
@@ -73,6 +80,9 @@ struct AddSport {
               .backgroundColor(Color.Transparent)
               .onClick(() => {
                 // todo: Trigger select sport action
+                this.current_sport = item
+                this.current_sport.num = this.num
+                AppStorage.setOrCreate("current_sport", this.current_sport);
                 this.controller.open()
               })
             }

@@ -7,13 +7,14 @@ import { Sport } from '../model/dailyExercise'
 import { Record } from '../model/record'
 import promptAction from '@ohos.promptAction';
 
-PersistentStorage.persistProp<Record[]>('recordList', [])
+// PersistentStorage.persistProp<Record[]>('recordList', [])
+PersistentStorage.persistProp<Record>('todayRecord', new Record())
+AppStorage.setOrCreate<Record[]>("recordList", []);
 
 
 @Entry
 @Component
 export struct Workout {
-  pathStack: NavPathStack = new NavPathStack()
   @State convertedDate: string = ''
   @StorageProp('date') date: number = DateUtil.beginTimeOfDay(new Date())
   @StorageLink('current_date') currentDate: string = ''
@@ -23,27 +24,29 @@ export struct Workout {
   })
   @State selectedDate: string = DateUtil.timestampToDate(new Date().getTime());
   @StorageProp('recordList') records: Record[] = []
-  @State todayRecord: Record = new Record()
+  @State todayRecordSports: Record = AppStorage.get("todayRecord") ?? new Record()
+  @StorageProp('todayRecord') todayRecord: Record = new Record()
+  // @State todayRecord: Record = new Record()
   @State isTodayFinish: boolean = false
-
-  @State arr: Sport[] = [
-    {
-      name: 'dancing',
-      icon: $r('app.media.app_icon'),
-      consume: 400,
-      target: 2,
-      num: 1,
-      unit: "times"
-    },
-    {
-      name: 'Jumping',
-      icon: $r('app.media.app_icon'),
-      consume: 400,
-      target: 2,
-      num: 2,
-      unit: "hours"
-    },
-  ]
+  @State num: number = 0
+  // @State arr: Sport[] = [
+  //   {
+  //     name: 'dancing',
+  //     icon: $r('app.media.app_icon'),
+  //     consume: 400,
+  //     target: 2,
+  //     num: 1,
+  //     unit: "times"
+  //   },
+  //   {
+  //     name: 'Jumping',
+  //     icon: $r('app.media.app_icon'),
+  //     consume: 400,
+  //     target: 2,
+  //     num: 2,
+  //     unit: "hours"
+  //   },
+  // ]
 
   @Builder
   PagesMap(name: string) {
@@ -53,10 +56,24 @@ export struct Workout {
   }
 
   aboutToAppear(): void {
-    AppStorage.setOrCreate("PathStack", this.pathStack)
+    console.info('aboutToAppear')
+    // if(!this.todayRecordSports){
+    //   this.todayRecord.sports = this.todayRecordSports.sports
+    //   console.info(`${this.todayRecord.sports[0].name}`)
+    // }
+    // this.todayRecord.sports = this.todayRecordSports.sports ?? []
+    // this.todayRecord.date = this.selectedDate
     systemDateTime.getCurrentTime((error: BusinessError, time: number) => {
       this.convertedDate = DateUtil.timestampToDate(time);
     });
+  }
+
+  onPageShow(): void {
+    console.info('onPageShow')
+  }
+
+  aboutToRecycle(): void {
+    console.info('recycle')
   }
 
   build() {
@@ -120,6 +137,7 @@ export struct Workout {
         .backgroundColor(Color.White)
         .width('100%')
       }
+      Text(`233${this.todayRecord.sports}`)
 
       Button() {
         Column() {
@@ -163,8 +181,17 @@ export struct Workout {
             .backgroundColor(Color.Black)
             .onClick(() => {
               //todo: add logic
+              console.info(`today recordsport in workout page: ${this.todayRecordSports.sports[0].name}`)
+              this.todayRecord.sports = this.todayRecordSports.sports
               this.todayRecord.date = this.selectedDate
+              this.records.push(this.todayRecord)
               console.info(`${this.todayRecord.date}`)
+              AppStorage.setOrCreate<Record[]>("recordList", this.records);
+              console.info(`today recordin workout page: ${this.todayRecord.sports[0].name}`)
+              console.info(`today recordin workout page: ${this.todayRecord.sports[0].num}`)
+
+              console.info(`total records in workout page: ${this.records[0].date}`)
+
               promptAction.showToast({
                 message: 'Task finished! Keep going~'
               })
@@ -173,10 +200,10 @@ export struct Workout {
         }
         .width('100%')
 
-        if (this.arr.length !== 0) {
+        if (this.todayRecord.sports.length !== 0) {
           Column() {
             List() {
-              ForEach(this.arr, (item: Sport) => {
+              ForEach(this.todayRecord.sports, (item: Sport) => {
                 ListItem() {
                   Row({ space: 10 }) {
                     Image($r('app.media.app_icon'))

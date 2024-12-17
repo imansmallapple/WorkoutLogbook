@@ -41,27 +41,19 @@ export struct Workout {
   @State num: number = 0
   @State sportSchedule: SportSchedule = new SportSchedule()
 
-  @Builder
-  PagesMap(name: string) {
-    if (name == "Workout List") {
-      WorkoutItem()
-    }
-  }
-
   aboutToAppear(): void {
-    console.info('aboutToAppear')
-
     systemDateTime.getCurrentTime((error: BusinessError, time: number) => {
       this.convertedDate = DateUtil.timestampToDate(time);
     });
   }
 
-  onPageShow(): void {
-    console.info('onPageShow')
-  }
-
-  aboutToRecycle(): void {
-    console.info('recycle')
+  @Builder
+  labelIcon(icon: string | Resource) { // Define a method named 'labelIcon' to build label icons
+    Image(icon)// Create an Image component with the icon parameter as the source
+      .objectFit(ImageFit.Contain)// Set the image object fit to 'Contain'
+      .width("28vp")// Set image width to 28vp
+      .height("28vp")// Set image height to 28vp
+      .margin("20vp") // Set margin to 20vp
   }
 
   build() {
@@ -246,7 +238,6 @@ export struct Workout {
                         .fontSize(13)
                         .fontWeight(600)
                         .opacity(0.8)
-
                       if (item.num == item.target) {
                         Text('Consume ' + item.consume * (item.num as number) + ' Calories')
                           .fontSize(13)
@@ -254,6 +245,23 @@ export struct Workout {
                           .margin({ right: 10 })
                           .fontColor('#e90e5e85')
                       }
+                        if (item.isStart === false) {
+                          Row() {
+                            this.labelIcon($r('app.media.start_icon'))
+                          }
+                          .onClick(() => {
+                            item.isStart = true
+                          })
+
+                        } else if (item.isStart === true) {
+                          Row() {
+                            this.labelIcon($r('app.media.pause_icon'))
+                          }.onClick(() => {
+                            item.isStart = false
+                          })
+                        }
+                        // Image($r('app.media.start_icon'))
+                        //   .width(20)
                     }
                     .width('100%')
                     .backgroundColor(Color.White)

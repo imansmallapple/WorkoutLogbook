@@ -14,7 +14,7 @@ export struct SportDetailDialog {
   controller: CustomDialogController
   @State val: string = ''
   @Link num: number;
-  @State calorie: number = 0
+  @State calorie: number = this.current_sport.consume
 
   @Builder
   confirmButton(text: string, color: ResourceColor | string, onClick: ((event: ClickEvent) => void)) {

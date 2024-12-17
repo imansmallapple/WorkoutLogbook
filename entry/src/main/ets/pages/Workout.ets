@@ -12,6 +12,10 @@ import router from '@ohos.router';
 PersistentStorage.persistProp<Sport[]>('todaySports', [])
 AppStorage.setOrCreate<Record[]>("recordList", []);
 
+export class FinishObject {
+  date: string = ''
+  isFinish: boolean = false
+}
 
 @Entry
 @Component
@@ -27,27 +31,9 @@ export struct Workout {
   @StorageProp('recordList') records: Record[] = []
   @State todaySports: Sport[] = AppStorage.get("todaySports") ?? []
   @State todayRecord: Record = new Record()
-
+  @State finishObj: FinishObject = new FinishObject()
   @State isTodayFinish: boolean = false
   @State num: number = 0
-  // @State arr: Sport[] = [
-  //   {
-  //     name: 'dancing',
-  //     icon: $r('app.media.app_icon'),
-  //     consume: 400,
-  //     target: 2,
-  //     num: 1,
-  //     unit: "times"
-  //   },
-  //   {
-  //     name: 'Jumping',
-  //     icon: $r('app.media.app_icon'),
-  //     consume: 400,
-  //     target: 2,
-  //     num: 2,
-  //     unit: "hours"
-  //   },
-  // ]
 
   @Builder
   PagesMap(name: string) {
@@ -118,9 +104,16 @@ export struct Workout {
           .margin({ top: 30 })
 
           Row() {
-            Text('Have you worked out today?')
-              .fontSize(18)
-              .fontColor('#ff0b256e')
+            if (this.finishObj.date !== this.selectedDate) {
+              Text('Have you worked out today?')
+                .fontSize(18)
+                .fontColor('#ff0b256e')
+            }
+            else {
+              Text('Good Job! Keep going~')
+                .fontSize(18)
+                .fontColor('#ff0b256e')
+            }
           }
           .width('80%')
           .height('20%')
@@ -142,7 +135,10 @@ export struct Workout {
         }
       }
       .onClick(() => {
-        this.optionDialogController.open()
+        // this.optionDialogController.open()
+        router.pushUrl({
+          url: 'pages/AddSport'
+        })
       })
       .backgroundColor('#b770c805')
       .type(ButtonType.Normal)
@@ -168,85 +164,112 @@ export struct Workout {
             .fontWeight(700)
             .margin({ left: 20, top: 20, bottom: 10 })
           Blank()
-          Button('Finish today')
-            .type(ButtonType.Normal)
-            .borderRadius(5)
-            .width(120)
-            .fontSize(13)
-            .backgroundColor(Color.Black)
-            .onClick(() => {
-              //todo: add logic
-              console.info(`today recordsport in workout page: ${this.todaySports[0].name}`)
+          if (this.finishObj.date !== this.selectedDate) {
 
-              this.records.push(this.todayRecord)
-              console.info(`${this.todayRecord.date}`)
-              this.todayRecord.sports = this.todaySports
-              this.todayRecord.date = this.selectedDate
-              AppStorage.setOrCreate<Record[]>("recordList", this.records);
-              console.info(`today recordin workout page: ${this.todayRecord.sports[0].name}`)
-              console.info(`today recordin workout page: ${this.todayRecord.sports[0].num}`)
-              console.info(`today record lenth in workout page:${this.todayRecord.sports.length}`)
-              console.info(`total records in workout page: ${this.records[0].date}`)
+            Button('Finish today')
+              .type(ButtonType.Normal)
+              .borderRadius(5)
+              .width(120)
+              .fontSize(13)
+              .backgroundColor(Color.Black)
+              .onClick(() => {
+                if (this.todaySports.length == 0) {
+                  promptAction.showToast({
+                    message:"Please add a sport first!"
+                  })
+                }
+                else {
+                  this.finishObj.date = this.selectedDate
+                  this.finishObj.isFinish = true
 
-              promptAction.showToast({
-                message: 'Task finished! Keep going~'
+                  this.records.push(this.todayRecord)
+                  console.info(`${this.todayRecord.date}`)
+                  this.todayRecord.sports = this.todaySports
+                  this.todayRecord.date = this.selectedDate
+                  AppStorage.setOrCreate<Record[]>("recordList", this.records);
+
+                  promptAction.showToast({
+                    message: 'Task finished! Keep going~'
+                  })
+                  router.pushUrl({ url: 'pages/Record',
+                    params: {
+                      record: this.todayRecord
+                    }
+                  })
+                }
               })
-              router.pushUrl({url: 'pages/Record',
-              params:{
-                record: this.todayRecord
-              }
-              })
-            })
-
+          }
         }
         .width('100%')
 
-        if (this.todaySports.length !== 0) {
-          Column() {
-            List() {
-              ForEach(this.todaySports, (item: Sport) => {
-                ListItem() {
-                  Row({ space: 10 }) {
-                    Image($r('app.media.app_icon'))
-                      .width(50)
-                      .height(50)
-                    Text(item.name)
-                      .fontSize(13)
-                      .fontWeight(600)
-                      .opacity(0.8)
-                    Blank()
-                    if (item.num == item.target) {
-                      Text('Consume ' + item.consume * (item.num as number) + ' Calories')
-                        .fontSize(13)
-                        .fontWeight(600)
-                        .margin({ right: 10 })
-                        .fontColor('#e90e5e85')
-                    }
-                  }
-                  .width('100%')
-                  .backgroundColor(Color.White)
-                  .borderRadius(15)
-                  .margin({ bottom: 10 })
-                }
-                .width('90%')
-              })
-            }
-            .width('100%')
-            .alignListItem(ListItemAlign.Center)
-          }
-          .width('100%')
-        }
-        else {
+        if (this.finishObj.date == this.selectedDate) {
           Column({ space: 8 }) {
             Image($r('app.media.startIcon'))
               .width(100)
               .height(100)
-            Text('No task, please add')
+            Text('Congratulations, you finished all tasks!')
               .fontSize(20)
               .opacity(0.4)
           }
           .width('100%')
           .margin({ top: 20 })
+        } else {
+          if (this.todaySports.length !== 0) {
+            Column() {
+              List() {
+                ForEach(this.todaySports, (item: Sport) => {
+                  ListItem() {
+                    Row({ space: 10 }) {
+                      Image($r('app.media.app_icon'))
+                        .width(60)
+                        .height(60)
+                      Text(item.name)
+                        .fontSize(13)
+                        .fontWeight(600)
+                        .opacity(0.8)
+                      Text(`Left:${item.num.toString()} hours`)
+                        .fontSize(13)
+                        .fontWeight(600)
+                        .opacity(0.8)
+                      Blank()
+                      Text(`${(item.num as number) * item.consume} calories`)
+                        .fontSize(13)
+                        .fontWeight(600)
+                        .opacity(0.8)
+
+                      if (item.num == item.target) {
+                        Text('Consume ' + item.consume * (item.num as number) + ' Calories')
+                          .fontSize(13)
+                          .fontWeight(600)
+                          .margin({ right: 10 })
+                          .fontColor('#e90e5e85')
+                      }
+                    }
+                    .width('100%')
+                    .backgroundColor(Color.White)
+                    .borderRadius(15)
+                    .margin({ bottom: 10 })
+                  }
+                  .width('90%')
+                })
+              }
+              .width('100%')
+              .alignListItem(ListItemAlign.Center)
+            }
+            .width('100%')
+          }
+          else {
+            Column({ space: 8 }) {
+              Image($r('app.media.startIcon'))
+                .width(100)
+                .height(100)
+              Text('No task, please add')
+                .fontSize(20)
+                .opacity(0.4)
+            }
+            .width('100%')
+            .margin({ top: 20 })
+          }
         }
       }
       .width('100%')

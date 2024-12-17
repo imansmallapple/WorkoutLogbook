@@ -8,7 +8,7 @@ import { Record } from '../model/record'
 export struct SportDetailDialog {
   @StorageProp('date') date: number = DateUtil.beginTimeOfDay(new Date())
   @State current_sport: Sport = AppStorage.get("current_sport") ?? new Sport()
-  @State todayRecord: Record = AppStorage.get("todayRecord") ?? new Record()
+  @State todaySports: Sport[] = AppStorage.get("todaySports") ?? []
   @State show: boolean = true
   keyboardArray: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.']
   controller: CustomDialogController
@@ -166,7 +166,7 @@ export struct SportDetailDialog {
           this.confirmButton('Confirm', '#ff08dec0', () => {
             //Save sport
             this.current_sport.num = this.num
-            this.todayRecord.sports.push(this.current_sport)
+            this.todaySports.push(this.current_sport)
             this.controller.close()
           })
         }

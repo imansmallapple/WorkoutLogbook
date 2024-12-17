@@ -1,14 +1,22 @@
 import { Exercise } from './WorkoutItem'
 import { Record } from '../model/record'
+import { Sport } from '../model/dailyExercise'
+import router from '@ohos.router'
+PersistentStorage.persistProp<Record[]>('records', [])
+
+interface RouterParams {
+  record: Record
+}
 
 @Entry
 @Component
 export struct RecordPage {
   @StorageLink('selectedExerciseList') selectedExercise: Exercise[] = []
-  // @State records: Record[] = AppStorage.get<Record[]>("recordList") ?? []
-  // @StorageLink('recordList') records: Record[] = []
-  // @StorageProp('recordList') records: Record[] = [];
-  @State records: Record[] = AppStorage.get("recordList") ?? []
+  // @State records: Record[] = AppStorage.get("recordList") ?? []
+  // @State records: Record[] = []
+  @State record: Record = new Record()
+  @StorageLink('records') records: Record[] = []
+
   aboutToAppear(): void {
     console.info('RecordPage aboutToAppear triggered');
     console.info(`Number of records: ${this.records.length}`);
@@ -16,6 +24,12 @@ export struct RecordPage {
     this.records.forEach((item: Record, index: number) => {
       console.info(`Record ${index}: Date = ${item.date}`);
     });
+  }
+
+  onPageShow() {
+    const params = router.getParams() as RouterParams
+    this.record = params.record
+    this.records.push(this.record)
   }
 
   @Builder
@@ -65,24 +79,39 @@ export struct RecordPage {
 
         Row() {
           Column() {
-              Text(`total record time in record page:${this.records}`)
-              List(){
-                ForEach(this.records,(item: Record, index: number)=>{
-                  ListItem(){
-                    Row(){
+            Text(`total record time in record page:${this.records}`)
+            List() {
+              ForEach(this.records, (item: Record, index: number) => {
+                ListItem() {
+                  Column() {
+                    Row() {
                       Text(`record date: ${item.date}`)
                     }
-                  }
-                })
-              }
 
-              Row() {
-                Text(`24th November 2024`)
-                  .fontSize(18)
-                  .fontColor('#f735028a')
-                  .fontWeight(500)
-              }
-              .width('100%')
+                    Row() {
+                      // Stores all sports of this day
+                      List() {
+                        ForEach(item.sports, (sport: Sport, index: number) => {
+                          ListItem() {
+                            Column() {
+                              Text(`Sport: ${sport.name}`)
+                            }
+                          }
+                        })
+                      }
+                    }
+                  }
+                }
+              })
+            }
+
+            Row() {
+              Text(`24th November 2024`)
+                .fontSize(18)
+                .fontColor('#f735028a')
+                .fontWeight(500)
+            }
+            .width('100%')
 
             Row() {
               Divider()

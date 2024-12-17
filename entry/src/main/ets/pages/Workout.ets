@@ -6,9 +6,10 @@ import { OptionDialog } from '../Component/exerciseOptionComponent'
 import { Sport } from '../model/dailyExercise'
 import { Record } from '../model/record'
 import promptAction from '@ohos.promptAction';
+import router from '@ohos.router';
 
 // PersistentStorage.persistProp<Record[]>('recordList', [])
-PersistentStorage.persistProp<Record>('todayRecord', new Record())
+PersistentStorage.persistProp<Sport[]>('todaySports', [])
 AppStorage.setOrCreate<Record[]>("recordList", []);
 
 
@@ -24,9 +25,9 @@ export struct Workout {
   })
   @State selectedDate: string = DateUtil.timestampToDate(new Date().getTime());
   @StorageProp('recordList') records: Record[] = []
-  @State todayRecordSports: Record = AppStorage.get("todayRecord") ?? new Record()
-  @StorageProp('todayRecord') todayRecord: Record = new Record()
-  // @State todayRecord: Record = new Record()
+  @State todaySports: Sport[] = AppStorage.get("todaySports") ?? []
+  @State todayRecord: Record = new Record()
+
   @State isTodayFinish: boolean = false
   @State num: number = 0
   // @State arr: Sport[] = [
@@ -57,12 +58,7 @@ export struct Workout {
 
   aboutToAppear(): void {
     console.info('aboutToAppear')
-    // if(!this.todayRecordSports){
-    //   this.todayRecord.sports = this.todayRecordSports.sports
-    //   console.info(`${this.todayRecord.sports[0].name}`)
-    // }
-    // this.todayRecord.sports = this.todayRecordSports.sports ?? []
-    // this.todayRecord.date = this.selectedDate
+
     systemDateTime.getCurrentTime((error: BusinessError, time: number) => {
       this.convertedDate = DateUtil.timestampToDate(time);
     });
@@ -181,29 +177,35 @@ export struct Workout {
             .backgroundColor(Color.Black)
             .onClick(() => {
               //todo: add logic
-              console.info(`today recordsport in workout page: ${this.todayRecordSports.sports[0].name}`)
-              this.todayRecord.sports = this.todayRecordSports.sports
-              this.todayRecord.date = this.selectedDate
+              console.info(`today recordsport in workout page: ${this.todaySports[0].name}`)
+
               this.records.push(this.todayRecord)
               console.info(`${this.todayRecord.date}`)
+              this.todayRecord.sports = this.todaySports
+              this.todayRecord.date = this.selectedDate
               AppStorage.setOrCreate<Record[]>("recordList", this.records);
               console.info(`today recordin workout page: ${this.todayRecord.sports[0].name}`)
               console.info(`today recordin workout page: ${this.todayRecord.sports[0].num}`)
-
+              console.info(`today record lenth in workout page:${this.todayRecord.sports.length}`)
               console.info(`total records in workout page: ${this.records[0].date}`)
 
               promptAction.showToast({
                 message: 'Task finished! Keep going~'
+              })
+              router.pushUrl({url: 'pages/Record',
+              params:{
+                record: this.todayRecord
+              }
               })
             })
 
         }
         .width('100%')
 
-        if (this.todayRecord.sports.length !== 0) {
+        if (this.todaySports.length !== 0) {
           Column() {
             List() {
-              ForEach(this.todayRecord.sports, (item: Sport) => {
+              ForEach(this.todaySports, (item: Sport) => {
                 ListItem() {
                   Row({ space: 10 }) {
                     Image($r('app.media.app_icon'))

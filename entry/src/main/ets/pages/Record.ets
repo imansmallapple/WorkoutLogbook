@@ -41,6 +41,9 @@ export struct RecordPage {
           Image($r('app.media.back_icon'))
             .width(20)
         }
+        .onClick(()=>{
+          router.back()
+        })
         .width('10%')
         .justifyContent(FlexAlign.Center)
 
@@ -140,15 +143,6 @@ export struct RecordPage {
                 }
               })
             }
-
-            Row() {
-              Text('Total: 48m49s')
-                .fontColor('#f735028a')
-                .fontSize(15)
-            }
-            .width('100%')
-            .margin({ top: 5 })
-            .justifyContent(FlexAlign.End)
           }
         }
         .width('100%')

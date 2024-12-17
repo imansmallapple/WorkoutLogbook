@@ -19,25 +19,29 @@ struct AddSport {
       name: 'Dancing',
       icon: $r('app.media.icon'),
       consume: 450,
-      unit: 'hour'
+      unit: 'hour',
+      isStart: false
     },
     {
       name: 'Bicycle',
       icon: $r('app.media.icon'),
       consume: 600,
-      unit: 'hour'
+      unit: 'hour',
+      isStart: false
     },
     {
       name: 'Jogging',
       icon: $r('app.media.icon'),
       consume: 500,
-      unit: 'hour'
+      unit: 'hour',
+      isStart: false
     },
     {
       name: 'Swimming',
       icon: $r('app.media.icon'),
       consume: 700,
-      unit: 'hour'
+      unit: 'hour',
+      isStart: false
     },
   ]
 

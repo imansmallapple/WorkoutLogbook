@@ -5,4 +5,6 @@ export class Sport {
   num?: number | string = 0
   target?: number | string = 0
   unit: string = ''
+  isFinish?: boolean = false
+  isStart?: boolean = false
 }

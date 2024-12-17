@@ -1,15 +1,19 @@
 import DateUtil from '../Utils/DateUtils';
 import { Callback } from '@ohos.base';
+import { Sport } from '../model/dailyExercise';
+import { Record } from '../model/record'
 
 @Preview
 @CustomDialog
 export struct SportDetailDialog {
   @StorageProp('date') date: number = DateUtil.beginTimeOfDay(new Date())
+  @State current_sport: Sport = AppStorage.get("current_sport") ?? new Sport()
+  @State todayRecord: Record = AppStorage.get("todayRecord") ?? new Record()
   @State show: boolean = true
   keyboardArray: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.']
   controller: CustomDialogController
   @State val: string = ''
-  @State num: number = 0
+  @Link num: number;
   @State calorie: number = 0
 
   @Builder
@@ -160,6 +164,9 @@ export struct SportDetailDialog {
             this.show = true
           })
           this.confirmButton('Confirm', '#ff08dec0', () => {
+            //Save sport
+            this.current_sport.num = this.num
+            this.todayRecord.sports.push(this.current_sport)
             this.controller.close()
           })
         }

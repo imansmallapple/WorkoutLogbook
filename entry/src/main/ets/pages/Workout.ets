@@ -17,6 +17,11 @@ export class FinishObject {
   isFinish: boolean = false
 }
 
+export class SportSchedule{
+  date: string = ''
+  sports: Sport[] = []
+}
+
 @Entry
 @Component
 export struct Workout {
@@ -34,6 +39,7 @@ export struct Workout {
   @State finishObj: FinishObject = new FinishObject()
   @State isTodayFinish: boolean = false
   @State num: number = 0
+  @State sportSchedule: SportSchedule = new SportSchedule()
 
   @Builder
   PagesMap(name: string) {
@@ -66,9 +72,9 @@ export struct Workout {
             Text(`${this.selectedDate}`)
               .fontSize(15)
               .fontWeight(500)
-            Image($r('app.media.drop_icon'))
-              .width(15)
-              .margin({ left: 10 })
+            // Image($r('app.media.drop_icon'))
+            //   .width(15)
+            //   .margin({ left: 10 })
           }
           .width('50%')
           .height(50)
@@ -78,23 +84,23 @@ export struct Workout {
           })
           .borderRadius(10)
           .justifyContent(FlexAlign.Center)
-          .onClick(() => {
-            CalendarPickerDialog.show({
-              selected: new Date(this.selectedDate),
-              onAccept: (value) => {
-                console.info("Calendar onAccept:" + JSON.stringify(value));
-                this.selectedDate = DateUtil.timestampToDate(value.getTime()); // 更新选中的日期
-              },
-              onCancel: () => {
-                console.info("Calendar onCancel");
-              },
-              onChange: (value) => {
-                console.info("Calendar onChange:" + JSON.stringify(value));
-                this.selectedDate = DateUtil.timestampToDate(value.getTime()); // 实时更新选中的日期
-              },
-            });
-
-          })
+          // .onClick(() => {
+          //   CalendarPickerDialog.show({
+          //     selected: new Date(this.selectedDate),
+          //     onAccept: (value) => {
+          //       console.info("Calendar onAccept:" + JSON.stringify(value));
+          //       this.selectedDate = DateUtil.timestampToDate(value.getTime()); // 更新选中的日期
+          //     },
+          //     onCancel: () => {
+          //       console.info("Calendar onCancel");
+          //     },
+          //     onChange: (value) => {
+          //       console.info("Calendar onChange:" + JSON.stringify(value));
+          //       this.selectedDate = DateUtil.timestampToDate(value.getTime()); // 实时更新选中的日期
+          //     },
+          //   });
+          //
+          // })
           .shadow({
             radius: 20,
             offsetX: 10,
@@ -155,6 +161,9 @@ export struct Workout {
         radius: 30,
         offsetY: 10,
         color: Color.Gray
+      })
+      .margin({
+        bottom:25
       })
 
       Column() {
@@ -227,7 +236,7 @@ export struct Workout {
                         .fontSize(13)
                         .fontWeight(600)
                         .opacity(0.8)
-                      Text(`Left:${item.num.toString()} hours`)
+                      Text(`Left:${item.num} hours`)
                         .fontSize(13)
                         .fontWeight(600)
                         .opacity(0.8)

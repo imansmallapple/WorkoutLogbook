@@ -41,7 +41,7 @@ export struct RecordPage {
           Image($r('app.media.back_icon'))
             .width(20)
         }
-        .onClick(()=>{
+        .onClick(() => {
           router.back()
         })
         .width('10%')
@@ -81,25 +81,38 @@ export struct RecordPage {
           })
         }
 
-        Row() {
-          Column() {
-            List() {
-              ForEach(this.records, (item: Record, index: number) => {
-                ListItem() {
-                  Column() {
-                    Row() {
-                      Text(`${item.date}`)
-                        .fontSize(18)
-                        .fontColor('#f735028a')
-                        .fontWeight(500)
-                    }
-                    .width('100%')
+        if (this.records.length == 0) {
+          Column({ space: 8 }) {
+            Image($r('app.media.startIcon'))
+              .width(100)
+              .height(100)
+            Text('No records')
+              .fontSize(20)
+              .opacity(0.4)
+          }
+          .width('100%')
+          .height('100%')
+          .justifyContent(FlexAlign.Center)
+        } else {
+          Row() {
+            Column() {
+              List() {
+                ForEach(this.records, (item: Record, index: number) => {
+                  ListItem() {
+                    Column() {
+                      Row() {
+                        Text(`${item.date}`)
+                          .fontSize(18)
+                          .fontColor('#f735028a')
+                          .fontWeight(500)
+                      }
+                      .width('100%')
 
-                    Row() {
-                      // Stores all sports of this day
-                      List() {
-                        ForEach(item.sports, (sport: Sport, index: number) => {
-                          ListItem() {
+                      Row() {
+                        // Stores all sports of this day
+                        List() {
+                          ForEach(item.sports, (sport: Sport, index: number) => {
+                            ListItem() {
                               Column() {
                                 Row() {
                                   Text(`${sport.name}`)
@@ -134,21 +147,22 @@ export struct RecordPage {
                                 offsetY: 10,
                                 color: '#5b5ea237'
                               })
-                            .margin({bottom: 15})
-                          }
-                        })
+                              .margin({ bottom: 15 })
+                            }
+                          })
+                        }
                       }
                     }
                   }
-                }
-              })
+                })
+              }
             }
           }
+          .width('100%')
+          .height('100%')
+          .justifyContent(FlexAlign.Start)
+          .alignItems(VerticalAlign.Top)
         }
-        .width('100%')
-        .height('100%')
-        .justifyContent(FlexAlign.Start)
-        .alignItems(VerticalAlign.Top)
       }
     }
     .width('100%')

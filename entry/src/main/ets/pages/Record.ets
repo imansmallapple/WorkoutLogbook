@@ -1,4 +1,3 @@
-import { Exercise } from './WorkoutItem'
 import { Record } from '../model/record'
 import { Sport } from '../model/dailyExercise'
 import router from '@ohos.router'
@@ -13,9 +12,6 @@ interface RouterParams {
 @Entry
 @Component
 export struct RecordPage {
-  @StorageLink('selectedExerciseList') selectedExercise: Exercise[] = []
-  // @State records: Record[] = AppStorage.get("recordList") ?? []
-  // @State records: Record[] = []
   @State record: Record = new Record()
   @StorageLink('records') records: Record[] = []
   @State totalTime: number = 0
@@ -90,19 +86,12 @@ export struct RecordPage {
     Column() {
       this.NavigationComponent()
       Column({ space: 10 }) {
-        List() {
-          ForEach(this.selectedExercise, (item: Exercise) => {
-            ListItem() {
-              Text(item.name)
-            }
-          })
-        }
-
         if (this.records.length == 0) {
           Column({ space: 8 }) {
-            Image($r('app.media.startIcon'))
+            Image($r('app.media.history'))
               .width(100)
               .height(100)
+              .opacity(0.4)
             Text('No records')
               .fontSize(20)
               .opacity(0.4)

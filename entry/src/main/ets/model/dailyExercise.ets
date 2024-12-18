@@ -7,6 +7,6 @@ export class Sport {
   unit: string = ''
   isFinish?: boolean = false
   isStart?: boolean = false
-  burnedCalories?: number = 0
-  usedTime?: number = 0
+  burnedCalories: number = 0
+  usedTime: number = 0
 }

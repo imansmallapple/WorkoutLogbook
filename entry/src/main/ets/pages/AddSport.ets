@@ -20,28 +20,36 @@ struct AddSport {
       icon: $r('app.media.icon'),
       consume: 450,
       unit: 'hour',
-      isStart: false
+      isStart: false,
+      burnedCalories: 0,
+      usedTime: 0
     },
     {
       name: 'Bicycle',
       icon: $r('app.media.icon'),
       consume: 600,
       unit: 'hour',
-      isStart: false
+      isStart: false,
+      burnedCalories: 0,
+      usedTime: 0
     },
     {
       name: 'Jogging',
       icon: $r('app.media.icon'),
       consume: 500,
       unit: 'hour',
-      isStart: false
+      isStart: false,
+      burnedCalories: 0,
+      usedTime: 0
     },
     {
       name: 'Swimming',
       icon: $r('app.media.icon'),
       consume: 700,
       unit: 'hour',
-      isStart: false
+      isStart: false,
+      burnedCalories: 0,
+      usedTime: 0
     },
   ]
 

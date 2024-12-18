@@ -11,12 +11,12 @@ export default struct TaskItem {
   timerController: TextTimerController = new TextTimerController()
 
   @Builder
-  labelIcon(icon: string | Resource) { // Define a method named 'labelIcon' to build label icons
-    Image(icon)// Create an Image component with the icon parameter as the source
-      .objectFit(ImageFit.Contain)// Set the image object fit to 'Contain'
-      .width("25vp")// Set image width to 28vp
-      .height("25vp")// Set image height to 28vp
-      .margin("10vp") // Set margin to 20vp
+  labelIcon(icon: string | Resource) {
+    Image(icon)
+      .objectFit(ImageFit.Contain)
+      .width("25vp")
+      .height("25vp")
+      .margin({left: 15})
   }
 
   startSport() {
@@ -45,13 +45,6 @@ export default struct TaskItem {
         })
 
       Column() {
-        // Text(`Left:${this.item.num} hours`)
-        //   .fontSize(13)
-        //   .fontWeight(600)
-        //   .opacity(this.isComplete ? 0.4 : 0.8)
-        //   .decoration({
-        //     type: this.isComplete ? TextDecorationType.LineThrough : TextDecorationType.None
-        //   })
         if (!this.isComplete) {
           TextTimer({
             controller: this.timerController,
@@ -74,16 +67,7 @@ export default struct TaskItem {
       }
 
       Blank()
-      // Text(`${(this.item.num as number) * this.item.consume} calories`)
-      //   .fontSize(13)
-      //   .fontWeight(600)
-      //   .opacity(this.isComplete ? 0.4 : 0.8)
-      //   .decoration({
-      //     type: this.isComplete ? TextDecorationType.LineThrough : TextDecorationType.None
-      //   })
-
-      // todo: Add text show burned calories
-      Text(`calories: ${this.burnedCalories}`)
+      Text(`Consumed: ${this.burnedCalories} calories`)
         .fontSize(13)
         .fontWeight(600)
         .opacity(this.isComplete ? 0.4 : 0.8)
@@ -91,13 +75,6 @@ export default struct TaskItem {
           type: this.isComplete ? TextDecorationType.LineThrough : TextDecorationType.None
         })
 
-      if (this.item.num == this.item.target) {
-        Text('Consume ' + this.item.consume * (this.item.num as number) + ' Calories')
-          .fontSize(13)
-          .fontWeight(600)
-          .margin({ right: 10 })
-          .fontColor('#e90e5e85')
-      }
       Row() {
         if (!this.isComplete && !this.isStart) {
           this.labelIcon($r('app.media.start_icon'))

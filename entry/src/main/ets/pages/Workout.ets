@@ -1,22 +1,21 @@
 import DateUtil from '../Utils/DateUtils';
-import { Exercise, WorkoutItem } from './WorkoutItem';
 import systemDateTime from '@ohos.systemDateTime';
 import { BusinessError } from '@ohos.base';
-import { OptionDialog } from '../Component/exerciseOptionComponent'
 import { Sport } from '../model/dailyExercise'
 import { Record } from '../model/record'
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 import TaskItem from '../Component/taskItem';
-
-// PersistentStorage.persistProp<Record[]>('recordList', [])
-PersistentStorage.persistProp<Sport[]>('todaySports', [])
-AppStorage.setOrCreate<Record[]>("recordList", []);
-
 export class FinishObject {
   date: string = ''
   isFinish: boolean = false
 }
+
+PersistentStorage.persistProp<Sport[]>('todaySports', [])
+AppStorage.setOrCreate<Record[]>("recordList", []);
+PersistentStorage.persistProp<FinishObject>('finishObj',new FinishObject())
+
+
 
 export class SportSchedule {
   date: string = ''
@@ -29,15 +28,12 @@ export struct Workout {
   @State convertedDate: string = ''
   @StorageProp('date') date: number = DateUtil.beginTimeOfDay(new Date())
   @StorageLink('current_date') currentDate: string = ''
-  optionDialogController: CustomDialogController = new CustomDialogController({
-    builder: OptionDialog({}),
-    alignment: DialogAlignment.Center
-  })
   @State selectedDate: string = DateUtil.timestampToDate(new Date().getTime());
   @StorageProp('recordList') records: Record[] = []
   @State todaySports: Sport[] = AppStorage.get("todaySports") ?? []
   @State todayRecord: Record = new Record()
-  @State finishObj: FinishObject = new FinishObject()
+  // @State finishObj: FinishObject = new FinishObject()
+  @StorageProp('finishObj') finishObj: FinishObject = new FinishObject()
   @State isTodayFinish: boolean = false
   @State num: number = 0
   @State sportSchedule: SportSchedule = new SportSchedule()
@@ -57,9 +53,6 @@ export struct Workout {
             Text(`${this.selectedDate}`)
               .fontSize(15)
               .fontWeight(500)
-            // Image($r('app.media.drop_icon'))
-            //   .width(15)
-            //   .margin({ left: 10 })
           }
           .width('50%')
           .height(50)
@@ -69,23 +62,6 @@ export struct Workout {
           })
           .borderRadius(10)
           .justifyContent(FlexAlign.Center)
-          // .onClick(() => {
-          //   CalendarPickerDialog.show({
-          //     selected: new Date(this.selectedDate),
-          //     onAccept: (value) => {
-          //       console.info("Calendar onAccept:" + JSON.stringify(value));
-          //       this.selectedDate = DateUtil.timestampToDate(value.getTime()); // 更新选中的日期
-          //     },
-          //     onCancel: () => {
-          //       console.info("Calendar onCancel");
-          //     },
-          //     onChange: (value) => {
-          //       console.info("Calendar onChange:" + JSON.stringify(value));
-          //       this.selectedDate = DateUtil.timestampToDate(value.getTime()); // 实时更新选中的日期
-          //     },
-          //   });
-          //
-          // })
           .shadow({
             radius: 20,
             offsetX: 10,
@@ -127,7 +103,6 @@ export struct Workout {
           }
         }
         .onClick(() => {
-          // this.optionDialogController.open()
           router.pushUrl({
             url: 'pages/AddSport'
           })
@@ -177,6 +152,7 @@ export struct Workout {
                 else {
                   this.finishObj.date = this.selectedDate
                   this.finishObj.isFinish = true
+                  AppStorage.setOrCreate<FinishObject>("finishObj", this.finishObj);
 
                   this.records.push(this.todayRecord)
                   console.info(`${this.todayRecord.date}`)
@@ -203,7 +179,7 @@ export struct Workout {
             Image($r('app.media.congratulation'))
               .width(100)
               .height(100)
-            Text('Congratulations, you finished all tasks!')
+            Text('Congratulations, you finished all tasks today!')
               .fontSize(20)
               .opacity(0.4)
           }

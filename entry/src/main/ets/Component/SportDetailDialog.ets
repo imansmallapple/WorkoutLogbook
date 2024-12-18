@@ -68,13 +68,6 @@ export struct SportDetailDialog {
   build() {
     Column() {
       Row() {
-        // Image($r('app.media.icon'))
-        //   .width(20)
-        //   .height(20)
-        //   .onClick(() => {
-        //     this.controller.close()
-        //   })
-
         Blank()
 
         Text(DateUtil.timestampToDate(this.date))

@@ -1,6 +1,6 @@
 export class Sport {
   name: string = ''
-  icon?: string | Resource = ''
+  icon?: Resource = $r('app.media.app_icon')
   consume: number = 0
   num?: number | string = 0
   target?: number | string = 0

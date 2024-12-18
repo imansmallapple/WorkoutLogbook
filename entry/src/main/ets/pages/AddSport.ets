@@ -1,6 +1,7 @@
 import { Sport } from '../model/dailyExercise'
 import router from '@ohos.router'
 import { SportDetailDialog } from '../Component/SportDetailDialog'
+import { SportData } from '../Data/sportData';
 
 AppStorage.setOrCreate<Sport>("current_sport", new Sport());
 
@@ -14,49 +15,12 @@ struct AddSport {
       num: $num
     })
   })
-  arr: Sport[] = [
-    {
-      name: 'Dancing',
-      icon: $r('app.media.icon'),
-      consume: 450,
-      unit: 'hour',
-      isStart: false,
-      burnedCalories: 0,
-      usedTime: 0
-    },
-    {
-      name: 'Bicycle',
-      icon: $r('app.media.icon'),
-      consume: 600,
-      unit: 'hour',
-      isStart: false,
-      burnedCalories: 0,
-      usedTime: 0
-    },
-    {
-      name: 'Jogging',
-      icon: $r('app.media.icon'),
-      consume: 500,
-      unit: 'hour',
-      isStart: false,
-      burnedCalories: 0,
-      usedTime: 0
-    },
-    {
-      name: 'Swimming',
-      icon: $r('app.media.icon'),
-      consume: 700,
-      unit: 'hour',
-      isStart: false,
-      burnedCalories: 0,
-      usedTime: 0
-    },
-  ]
+  arr: Sport[] = SportData
 
   build() {
     Column() {
       Row() {
-        Image($r('app.media.icon'))
+        Image($r('app.media.back_icon'))
           .width(25)
       }
       .margin({ top: 10, left: 10, bottom: 10 })
@@ -64,7 +28,7 @@ struct AddSport {
         router.back()
       })
 
-      Text(`num:${this.num}`)
+      // Text(`num:${this.num}`)
 
       List({ space: 10 }) {
         ForEach(this.arr, (item: Sport) => {
@@ -87,13 +51,14 @@ struct AddSport {
 
               Blank()
               Button() {
-                Image($r('app.media.icon'))
+                Image($r('app.media.add'))
                   .width(20)
               }
               .backgroundColor(Color.Transparent)
               .onClick(() => {
                 // todo: Trigger select sport action
                 this.current_sport = item
+                // console.info(`item icon:${item.icon.toString()}`)
                 this.current_sport.num = this.num
                 this.num = 0
                 AppStorage.setOrCreate("current_sport", this.current_sport);

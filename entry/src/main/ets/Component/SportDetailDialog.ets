@@ -50,7 +50,7 @@ export struct SportDetailDialog {
     } else {
       this.num = amount
       this.val = val
-      console.info(`num:${this.num}, val:${this.val}`)
+      // console.info(`num:${this.num}, val:${this.val}`)
     }
   }
 
@@ -68,12 +68,12 @@ export struct SportDetailDialog {
   build() {
     Column() {
       Row() {
-        Image($r('app.media.icon'))
-          .width(20)
-          .height(20)
-          .onClick(() => {
-            this.controller.close()
-          })
+        // Image($r('app.media.icon'))
+        //   .width(20)
+        //   .height(20)
+        //   .onClick(() => {
+        //     this.controller.close()
+        //   })
 
         Blank()
 
@@ -85,7 +85,7 @@ export struct SportDetailDialog {
       .justifyContent(FlexAlign.End)
 
       Column({ space: 10 }) {
-        Image(`${this.current_sport.icon}`)
+        Image(this.current_sport.icon)
           .width(90)
           .height(90)
         Text(`${this.current_sport.name}`)

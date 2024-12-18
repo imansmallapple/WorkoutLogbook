@@ -200,7 +200,7 @@ export struct Workout {
 
         if (this.finishObj.date == this.selectedDate) {
           Column({ space: 8 }) {
-            Image($r('app.media.startIcon'))
+            Image($r('app.media.congratulation'))
               .width(100)
               .height(100)
             Text('Congratulations, you finished all tasks!')
@@ -234,9 +234,11 @@ export struct Workout {
           }
           else {
             Column({ space: 8 }) {
-              Image($r('app.media.startIcon'))
+              Image($r("app.media.no_task"))
                 .width(100)
                 .height(100)
+                .margin({left:15})
+                .opacity(0.4)
               Text('No task, please add')
                 .fontSize(20)
                 .opacity(0.4)

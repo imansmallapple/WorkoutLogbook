@@ -33,7 +33,7 @@ export default struct TaskItem {
 
   build() {
     Row({ space: 10 }) {
-      Image($r('app.media.app_icon'))
+      Image(this.item.icon)
         .width(60)
         .height(60)
       Text(this.item.name)
@@ -83,7 +83,7 @@ export default struct TaskItem {
       //   })
 
       // todo: Add text show burned calories
-      Text(`burned: ${this.burnedCalories}`)
+      Text(`calories: ${this.burnedCalories}`)
         .fontSize(13)
         .fontWeight(600)
         .opacity(this.isComplete ? 0.4 : 0.8)

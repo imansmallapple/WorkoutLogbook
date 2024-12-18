@@ -35,6 +35,7 @@ export struct RecordPage {
     this.records.push(this.record)
     this.updateTotals(); // 更新总计
   }
+
   updateTotals(): void {
     this.totalTime = 0;
     this.totalCalories = 0;
@@ -130,7 +131,11 @@ export struct RecordPage {
                           ForEach(item.sports, (sport: Sport, index: number) => {
                             ListItem() {
                               Column() {
-                                Row({space: 10}) {
+                                Row() {
+                                  Image(sport.icon)
+                                    .width(40)
+                                    .height(40)
+                                    .margin({left: 5, top: 5})
                                   Text(`${sport.name}`)
                                     .fontSize(18)
                                     .fontColor('#f735028a')
@@ -143,10 +148,14 @@ export struct RecordPage {
                                     .fontSize(15)
                                     .fontWeight(500)
                                     .fontColor('#ff800303')
+                                    .margin({
+                                      left: 20
+                                    })
                                 }
+                                .alignItems(VerticalAlign.Center)
 
                                 Row() {
-                                  Text(`${TimeUtil.formatMilliseconds(sport.usedTime)}/${TimeUtil.formatHoursToHM(sport.num as number)}`)
+                                  Text(`Time: ${TimeUtil.formatMilliseconds(sport.usedTime)}/${TimeUtil.formatHoursToHM(sport.num as number)}`)
                                     .fontSize(10)
                                     .fontColor('#f735028a')
                                     .fontWeight(600)
@@ -160,19 +169,20 @@ export struct RecordPage {
                               }
                               .alignItems(HorizontalAlign.Start)
                               .width('95%')
-                              .height(50)
+                              .height(60)
                               .borderRadius(10)
                               .shadow({
                                 radius: 10,
                                 offsetY: 10,
                                 color: '#5b5ea237'
                               })
-                              .margin({ bottom: 15 })
+                              .margin({ left: 10, bottom: 15 })
                             }
                           })
                         }
                       }
-                      Row(){
+
+                      Row() {
                         Text(`Total time:${TimeUtil.formatMilliseconds(this.totalTime)}, consumed calories:${this.totalCalories}`)
                           .fontWeight(500)
                           .fontColor('#ff01273e')
